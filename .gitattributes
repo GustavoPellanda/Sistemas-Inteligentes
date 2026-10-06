@@ -1,0 +1,10 @@
+# Padroniza as terminações de linha dos arquivos de código e documentação.
+* text=auto eol=lf
+
+# Preserva os CSVs originais, inclusive suas terminações de linha.
+*.csv -text whitespace=cr-at-eol
+
+# Artefatos das entregas.
+*.pdf binary
+*.png binary
+*.joblib binary
