@@ -2,13 +2,14 @@
 
 Este repositório reúne as resoluções das tarefas da matéria **Sistemas Inteligentes**, do curso de **Bacharelado em Sistemas de Informação** da **UTFPR - Curitiba**.
 
-As três tarefas utilizam dados de vítimas do sistema VictSim:
+As quatro tarefas utilizam dados de vítimas do sistema VictSim:
 
 - [01 - Classificador.ipynb](01%20-%20Classificador.ipynb): classificação da triagem START (`tri`) com CART e MLP.
 - [02 - Regressor.ipynb](02%20-%20Regressor.ipynb): estimativa da probabilidade de sobrevivência (`sobr`) com CART e MLP.
 - [03 - Clustering.ipynb](03%20-%20Clustering.ipynb): agrupamento das 410 vítimas do mapa com K-Means, reutilizando as MLPs anteriores para inferir `tri` e `sobr`.
+- [04 - Sequenciamento.ipynb](04%20-%20Sequenciamento.ipynb): atribuição dos agrupamentos a cinco socorristas e busca de uma ordem de atendimento por Têmpera Simulada.
 
-As tarefas de classificação e regressão avaliam três configurações com cinco folds de validação cruzada, retreinam os melhores modelos com 10.000 amostras e os avaliam no teste cego de 1.300 vítimas fornecido pelo professor. O clustering compara K de 2 a 12, primeiro com posição espacial e depois com posição e sobrevivência padronizadas. A estratégia principal selecionou K = 7, com silhueta 0,376392 e cobertura de 100%; a atribuição de agentes e a sequência de socorro são discutidas conceitualmente no relatório.
+As tarefas de classificação e regressão avaliam três configurações com cinco folds de validação cruzada, retreinam os melhores modelos com 10.000 amostras e os avaliam no teste cego de 1.300 vítimas fornecido pelo professor. O clustering compara K de 2 a 12, primeiro com posição espacial e depois com posição e sobrevivência padronizadas. A estratégia principal selecionou K = 7, com silhueta 0,376392 e cobertura de 100%; a Tarefa 4 usa os sete agrupamentos para planejar as rotas de socorro.
 
 ## Organização
 
@@ -16,6 +17,7 @@ As tarefas de classificação e regressão avaliam três configurações com cin
 01 - Classificador.ipynb
 02 - Regressor.ipynb
 03 - Clustering.ipynb
+04 - Sequenciamento.ipynb
 dados/
   treino/              # Datasets das duas tarefas
   teste/               # Dataset fornecido pelo professor
@@ -26,10 +28,11 @@ docs/
 resultados/
   regressao/           # Gráficos real × predito
   clustering/          # Figuras finais e cluster_*.txt
+  sequenciamento/      # Rotas, atribuição e métricas geradas pelo quarto notebook
 modelos/
   classificador/       # CART e pipeline da MLP com scaler
   regressor/           # CART, MLP e scaler separado
-src/                   # Gerador de dados e funções de clustering
+src/                   # Geração de dados, clustering e sequenciamento
 requirements.txt
 ```
 
@@ -58,3 +61,5 @@ Nas tabelas de clustering, **SSE = √inércia** segue a menção à raiz quadra
 A visualização em Matplotlib utiliza o mapa e as predições. O [programa de referência do VictSim3](https://github.com/tacla/VictSim3/blob/main/data_vis_and_stats/plot_clusters_and_sequencing.py) também exige configuração do cenário, ground truth e Pygame para a execução completa. Seu leitor seleciona qualquer arquivo iniciado por `cluster`; por isso, a imagem se chama `agrupamentos_grid.png`, preservando a leitura dos arquivos `cluster_*.txt` na mesma pasta.
 
 O teste cego fica em `dados/teste/data.csv` e participa somente da avaliação final. A execução direta de `src/gerar_dados_vitimas.py` grava experimentos avulsos em `dados/gerados/1300v/`; os notebooks configuram seus próprios arquivos de treinamento.
+
+Para a Tarefa 4, execute o quarto notebook a partir da raiz com o mesmo ambiente. Ele usa as MLPs salvas e os IDs dos agrupamentos existentes. As células finais executam a busca com cinco sementes e gravam as saídas em `resultados/sequenciamento/`. Cada pasta `sequencias_por_agente/agente_i/` contém a rota completa e os arquivos `cluster_j.txt` com os IDs atendidos daquele agrupamento, na ordem de visita.
